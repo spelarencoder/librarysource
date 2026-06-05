@@ -48,13 +48,6 @@ do
 		return object
 	end
 	
-	function utility:AddCorner(object, radius)
-		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, radius)
-		corner.Parent = object
-		return corner
-	end
-	
 	function utility:Tween(instance, properties, duration, ...)
 		tween:Create(instance, tweeninfo(duration, ...), properties):Play()
 	end
@@ -311,10 +304,6 @@ do
 			})
 		})
 		
-		-- Add corners
-		utility:AddCorner(container.Main, 12)
-		utility:AddCorner(container.Main.OutlineBorder, 12)
-		
 		utility:InitializeKeybind()
 		utility:DraggingEnabled(container.Main.TopBar, container.Main)
 		
@@ -432,8 +421,6 @@ do
 				})
 			})
 		})
-		
-		utility:AddCorner(container, 10)
 		
 		return setmetatable({
 			page = page,
@@ -606,7 +593,7 @@ do
 			})
 		})
 		
-		utility:AddCorner(notification, 8)
+		-- dragging
 		utility:DraggingEnabled(notification)
 		
 		-- position and size
@@ -711,7 +698,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(button, 6)
 		table.insert(self.modules, button)
 		--self:Resize()
 		
@@ -799,9 +785,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(toggle, 6)
-		utility:AddCorner(toggle.Button, 5)
-		utility:AddCorner(toggle.Button.Frame, 4)
 		table.insert(self.modules, toggle)
 		--self:Resize()
 		
@@ -875,8 +858,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(textbox, 6)
-		utility:AddCorner(textbox.Button, 5)
 		table.insert(self.modules, textbox)
 		--self:Resize()
 		
@@ -984,8 +965,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(keybind, 6)
-		utility:AddCorner(keybind.Button, 5)
 		table.insert(self.modules, keybind)
 		--self:Resize()
 		
@@ -1079,9 +1058,6 @@ do
 				SliceCenter = Rect.new(2, 2, 298, 298)
 			})
 		})
-		
-		utility:AddCorner(colorpicker, 6)
-		utility:AddCorner(colorpicker.Button, 5)
 		
 		local tab = utility:Create("ImageLabel", {
 			Name = "ColorPicker",
@@ -1345,7 +1321,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(tab, 8)
 		utility:DraggingEnabled(tab)
 		table.insert(self.modules, colorpicker)
 		--self:Resize()
@@ -1653,9 +1628,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(slider, 6)
-		utility:AddCorner(slider.Slider.Bar, 4)
-		utility:AddCorner(slider.Slider.Bar.Fill, 4)
 		table.insert(self.modules, slider)
 		--self:Resize()
 		
@@ -1803,8 +1775,6 @@ do
 			})
 		})
 		
-		utility:AddCorner(dropdown.Search, 6)
-		utility:AddCorner(dropdown.List, 6)
 		table.insert(self.modules, dropdown)
 		--self:Resize()
 		
@@ -2174,8 +2144,6 @@ do
 					TextTransparency = 0.10000000149012
 				})
 			})
-			
-			utility:AddCorner(button, 5)
 			
 			button.MouseButton1Click:Connect(function()
 				if callback then
