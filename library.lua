@@ -216,18 +216,6 @@ do
 			Name = title,
 			Parent = game.CoreGui
 		}, {
-			-- OUTLINE (5 stud equivalent - slightly whiter)
-			utility:Create("ImageLabel", {
-				Name = "Outline",
-				BackgroundTransparency = 1,
-				Position = UDim2.new(0.25, -8, 0.052435593, -8),
-				Size = UDim2.new(0, 527, 0, 444),
-				Image = "rbxassetid://4641149554",
-				ImageColor3 = Color3.fromRGB(200, 180, 200),
-				ScaleType = Enum.ScaleType.Slice,
-				SliceCenter = Rect.new(4, 4, 296, 296),
-				ZIndex = 0
-			}),
 			utility:Create("ImageLabel", {
 				Name = "Main",
 				BackgroundTransparency = 1,
@@ -238,6 +226,18 @@ do
 				ScaleType = Enum.ScaleType.Slice,
 				SliceCenter = Rect.new(4, 4, 296, 296)
 			}, {
+				-- OUTLINE - thin border attached to main frame
+				utility:Create("ImageLabel", {
+					Name = "OutlineBorder",
+					BackgroundTransparency = 1,
+					Position = UDim2.new(0, -3, 0, -3),
+					Size = UDim2.new(1, 6, 1, 6),
+					Image = "rbxassetid://4641149554",
+					ImageColor3 = Color3.fromRGB(80, 70, 85),
+					ScaleType = Enum.ScaleType.Slice,
+					SliceCenter = Rect.new(4, 4, 296, 296),
+					ZIndex = 0
+				}),
 				utility:Create("ImageLabel", {
 					Name = "Glow",
 					BackgroundTransparency = 1,
@@ -1549,7 +1549,7 @@ do
 			BackgroundTransparency = 1,
 			BorderSizePixel = 0,
 			Position = UDim2.new(0.292817682, 0, 0.299145311, 0),
-			Size = UDim2.new(1, 0, 0, 56),
+			Size = UDim2.new(1, 0, 0, 60),
 			ZIndex = 2,
 			Image = "rbxassetid://5028857472",
 			ImageColor3 = themes.DarkContrast,
@@ -1586,7 +1586,7 @@ do
 				Name = "Slider",
 				BackgroundTransparency = 1,
 				Position = UDim2.new(0, 10, 0, 30),
-				Size = UDim2.new(1, -20, 0, 18),
+				Size = UDim2.new(1, -20, 0, 22),
 				ZIndex = 3,
 				Text = "",
 			}, {
@@ -1595,7 +1595,7 @@ do
 					AnchorPoint = Vector2.new(0, 0.5),
 					BackgroundTransparency = 1,
 					Position = UDim2.new(0, 0, 0.5, 0),
-					Size = UDim2.new(1, 0, 0, 6),
+					Size = UDim2.new(1, 0, 0, 8),
 					ZIndex = 3,
 					Image = "rbxassetid://5028857472",
 					ImageColor3 = themes.LightContrast,
@@ -1619,7 +1619,7 @@ do
 							ImageTransparency = 1.000,
 							ImageColor3 = themes.TextColor,
 							Position = UDim2.new(1, 0, 0.5, 0),
-							Size = UDim2.new(0, 14, 0, 14),
+							Size = UDim2.new(0, 16, 0, 16),
 							ZIndex = 3,
 							Image = "rbxassetid://4608020054"
 						})
