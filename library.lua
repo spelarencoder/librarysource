@@ -29,77 +29,7 @@ game:GetService("StarterGui"):SetCore("SendNotification", {
 -- Make background 50% transparent before blur setup
 venyx.container.Main.ImageTransparency = 0.5
 
--- ===== ROUNDED CORNERS SETUP =====
-local function addRoundedCorners(guiObject, radius, fillColor)
-	-- Create corner instances for each corner
-	local cornerRadius = radius or 10
-	
-	local function createCorner(name, position)
-		local corner = Instance.new("Frame")
-		corner.Name = name
-		corner.Parent = guiObject
-		corner.BackgroundColor3 = fillColor or guiObject.BackgroundColor3
-		corner.BorderSizePixel = 0
-		corner.ZIndex = guiObject.ZIndex + 1
-		return corner
-	end
-	
-	-- Top-left, top-right, bottom-left, bottom-right
-	local tlCorner = createCorner("TL", "0, 0")
-	local trCorner = createCorner("TR", "0, 0")
-	local blCorner = createCorner("BL", "0, 0")
-	local brCorner = createCorner("BR", "0, 0")
-	
-	-- Position corners
-	tlCorner.Size = UDim2.new(0, cornerRadius, 0, cornerRadius)
-	tlCorner.Position = UDim2.new(0, 0, 0, 0)
-	
-	trCorner.Size = UDim2.new(0, cornerRadius, 0, cornerRadius)
-	trCorner.Position = UDim2.new(1, -cornerRadius, 0, 0)
-	
-	blCorner.Size = UDim2.new(0, cornerRadius, 0, cornerRadius)
-	blCorner.Position = UDim2.new(0, 0, 1, -cornerRadius)
-	
-	brCorner.Size = UDim2.new(0, cornerRadius, 0, cornerRadius)
-	brCorner.Position = UDim2.new(1, -cornerRadius, 1, -cornerRadius)
-	
-	return {tlCorner, trCorner, blCorner, brCorner}
-end
-
--- Add rounded corners to main container
-local mainContainer = venyx.container.Main
-addRoundedCorners(mainContainer, 12, customThemes.Background)
-
--- ===== OUTLINE SYSTEM (5 stud outline) =====
-local function createOutlineFrame(targetFrame, outlineThickness, outlineColor)
-	local outline = Instance.new("Frame")
-	outline.Name = "Outline"
-	outline.Parent = targetFrame.Parent
-	outline.BackgroundColor3 = outlineColor
-	outline.BorderSizePixel = 0
-	outline.ZIndex = targetFrame.ZIndex - 1
-	
-	-- Match target frame size and position
-	local function updateOutline()
-		outline.Size = UDim2.new(targetFrame.Size.X.Scale + 0.02, targetFrame.Size.X.Offset + outlineThickness * 2, 
-		                          targetFrame.Size.Y.Scale + 0.02, targetFrame.Size.Y.Offset + outlineThickness * 2)
-		outline.Position = UDim2.new(targetFrame.Position.X.Scale - 0.01, targetFrame.Position.X.Offset - outlineThickness,
-		                               targetFrame.Position.Y.Scale - 0.01, targetFrame.Position.Y.Offset - outlineThickness)
-	end
-	
-	updateOutline()
-	
-	-- Add rounded corners to outline
-	addRoundedCorners(outline, 14, outlineColor)
-	
-	return outline
-end
-
--- Create outline for main container
-local outlineColor = Color3.fromRGB(180, 160, 185) -- Slightly whiter purple
-createOutlineFrame(mainContainer, 5, outlineColor)
-
--- ===== BLUR SYSTEM (MacLib style) =====
+-- ===== BLUR SYSTEM (MacLib style with DepthOfField) =====
 local BlurTarget = venyx.container.Main
 local HS = HttpService
 local camera = workspace.CurrentCamera
@@ -123,6 +53,7 @@ if not DepthOfField then
 	DepthOfField.NearIntensity = 1
 	DepthOfField.Name = HS:GenerateGUID(true)
 	DepthOfField:AddTag(".blur_riot")
+	DepthOfField.Parent = Lighting
 end
 
 local frame = Instance.new('Frame')
@@ -258,7 +189,6 @@ local function UpdateOrientation(fetchProps)
 		for _, pt in pairs(parts) do
 			pt.Parent = nil
 			DepthOfField.Enabled = false
-			DepthOfField.Parent = nil
 		end
 		return
 	end
@@ -317,61 +247,6 @@ RunService.RenderStepped:Connect(UpdateOrientation)
 local page = venyx:addPage("Riot Abuse", 5012544693)
 local section1 = page:addSection("Toggle")
 local section2 = page:addSection("Settings")
-
--- ===== ENHANCE UI ELEMENTS =====
-local function enhanceUIElements(guiObject)
-	-- Recursively enhance all UI elements
-	for _, child in pairs(guiObject:GetDescendants()) do
-		if child:IsA("TextButton") then
-			-- Round buttons
-			child.AutoButtonColor = false
-			child.BorderSizePixel = 0
-			local originalColor = child.BackgroundColor3
-			
-			-- Add corner radius effect
-			if not child:FindFirstChild("UICorner") then
-				local corner = Instance.new("UICorner")
-				corner.CornerRadius = UDim.new(0, 8)
-				corner.Parent = child
-			end
-			
-			-- Make accent 20% transparent
-			if child.BackgroundColor3 == customThemes.Accent then
-				child.BackgroundTransparency = 0.2
-			end
-			
-		elseif child:IsA("Frame") and child.Name:match("Slider") then
-			-- Thicker sliders
-			child.Size = UDim2.new(child.Size.X.Scale, child.Size.X.Offset, 0, 12)
-			
-		elseif child:IsA("Frame") and (child.Name == "Section" or child.Parent.Name == "Section") then
-			-- Thicker sections - increase border/padding
-			if not child:FindFirstChild("UICorner") then
-				local corner = Instance.new("UICorner")
-				corner.CornerRadius = UDim.new(0, 10)
-				corner.Parent = child
-			end
-			
-		elseif child:IsA("Frame") and child.BackgroundColor3 == customThemes.LightContrast then
-			-- Rounder light contrasts
-			if not child:FindFirstChild("UICorner") then
-				local corner = Instance.new("UICorner")
-				corner.CornerRadius = UDim.new(0, 12)
-				corner.Parent = child
-			end
-		end
-	end
-end
-
--- ===== ACCENT WITH BLUR AND TRANSPARENCY =====
-local function applyAccentBlur()
-	for _, child in pairs(mainContainer:GetDescendants()) do
-		if child:IsA("Frame") and child.BackgroundColor3 == customThemes.Accent then
-			child.BackgroundTransparency = 0.2 -- 20% transparent
-			-- The blur effect is already applied via the DepthOfField effect
-		end
-	end
-end
 
 -- Riot Abuse Variables
 local riotEnabled = false
@@ -443,11 +318,6 @@ end
 for themeName, color in pairs(customThemes) do
 	venyx:setTheme(themeName, color)
 end
-
--- Apply UI enhancements
-task.wait(0.5) -- Wait for UI to fully render
-enhanceUIElements(mainContainer)
-applyAccentBlur()
 
 -- Select first page
 venyx:SelectPage(venyx.pages[1], true)
